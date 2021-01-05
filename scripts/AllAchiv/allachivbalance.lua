@@ -324,6 +324,33 @@ if not _G.COSTRAISE_CONFIG then
 	}
 end
 
+rocklist = {
+    ["gargoyle_houndatk"] = true,
+    ["gargoyle_hounddeath"] = true,
+    ["gargoyle_werepigatk"] = true,
+    ["gargoyle_werepigdeath"] = true,
+    ["gargoyle_werepighowl"] = true,
+    ["grotto_moonglass_1"] = true,
+    ["grotto_moonglass_3"] = true,
+    ["grotto_moonglass_4"] = true,
+    ["grotto_waterfall_small1"] = true,
+    ["grotto_waterfall_small2"] = true,
+    ["hotspring"] = true,
+    ["marbletree"] = true,
+    ["marblepillar"] = true,
+    ["rock_ice"] = true,
+    ["saltstack"] = true,
+    ["seastack"] = true,
+    ["stalagmite"] = true,
+    ["stalagmite_low"] = true,
+    ["stalagmite_med"] = true,
+    ["stalagmite_full"] = true,
+    ["stalagmite_tall"] = true,
+    ["stalagmite_tall_low"] = true,
+    ["stalagmite_tall_med"] = true,
+    ["stalagmite_tall_full"] = true,
+}
+
 foodmenu = { "baconeggs", "butterflymuffin", "dragonpie", "fishtacos",
 			 "fishsticks", "jammypreserves", "flowersalad", "frogglebunwich",
 			 "fruitmedley", "guacamole", "honeyham", "honeynuggets",
@@ -335,13 +362,6 @@ foodmenu = { "baconeggs", "butterflymuffin", "dragonpie", "fishtacos",
 			 "asparagussoup", "bananapop", "mashedpotatoes", "potatotornado",
 			 "salsa", "pepperpopper", "vegstinger", "ceviche"
 }
-
-rocklist = {"marbletree", "marblepillar",
-			"rock_ice", "rock_ice_tall", "rock_ice_medium", "rock_ice_short",
-			"stalagmite", "stalagmite_full", "stalagmite_med", "stalagmite_low", 
-			"stalagmite_tall", "stalagmite_tall_full", "stalagmite_tall_med", "stalagmite_tall_low", 
-}
-
 
 heatfood = {"dragonpie", "honeyham", "kabobs", "hotchili", "stuffedeggplant", "turkeydinner", "dragonchilisalad", "winter_food8", "winter_food7"}
 coldfood = {"watermelon", "watermelon_cooked", "fruitmedley", "ice", "watermelonicle", "icecream", "ceviche", "bananapop", "gazpacho", "winter_food9"}

@@ -2323,7 +2323,7 @@ end
 --Mine
 function allachivevent:miner(inst)
     inst:ListenForEvent("finishedwork", function(inst, data)
-        if data.target and (data.target:HasTag("boulder") or data.target:HasTag("statue") or findprefab(rocklist, data.target.prefab)) then
+        if data.target and (data.target:HasTag("boulder") or data.target:HasTag("statue") or rocklist[data.target.prefab]) then
             if not self.minemaster or not self.mineappren then
                 self.mineamount = self.mineamount + 1
 				if not self.mineappren and self.mineamount >= allachiv_eventdata["mineappren"] then

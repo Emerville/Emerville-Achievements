@@ -471,9 +471,12 @@ end
 function allachivcoin:minemasterfn(inst)
     if self.minemaster then
         inst:ListenForEvent("working", function(inst, data)
-			if self.minemaster and data.target and (data.target:HasTag("boulder") or data.target:HasTag("statue") or findprefab(rocklist, data.target.prefab)) then
-				local workable = data.target.components.workable
-				workable.workleft = 0
+			if self.minemaster and data.target and (data.target:HasTag("boulder") or data.target:HasTag("statue") or rocklist[data.target.prefab]) then
+                if data.target.prefab == "rock_ice" then
+                    data.target.components.workable:Destroy(data.target) -- Stage only goes down by 1 if worker is player, so pass glacier as the worker
+                else
+                    data.target.components.workable.workleft = 0
+                end
 			end
 		end)
     end
