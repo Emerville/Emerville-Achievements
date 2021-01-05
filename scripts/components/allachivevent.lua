@@ -2297,46 +2297,42 @@ end
 --Chop
 function allachivevent:chopper(inst)
     inst:ListenForEvent("finishedwork", function(inst, data)
-		if self.birchnut ~= true and data.target and data.target.prefab == "deciduoustree" and data.target.monster then
+		if not self.birchnut and data.target and data.target.prefab == "deciduoustree" and data.target.monster then
 			self.birchnutamount = self.birchnutamount + 1
 				if self.birchnutamount >= allachiv_eventdata["birchnut"] then
 					self.birchnut = true
-					self:seffc(inst, "birchnut")
+					self:seffc(self.inst, "birchnut")
 				end
 		end
         if data.target and data.target:HasTag("tree") then
-            if self.chopmaster ~= true or self.chopappren ~= true then
+            if not self.chopmaster or not self.chopappren then
                 self.chopamount = self.chopamount + 1
-				if self.chopamount >= allachiv_eventdata["chopappren"] and self.chopappren ~= true then
+				if not self.chopappren and self.chopamount >= allachiv_eventdata["chopappren"] then
 					self.chopappren = true
-					self:seffc(inst, "chopappren")
+					self:seffc(self.inst, "chopappren")
 				end
-                if self.chopamount >= allachiv_eventdata["chopmaster"] and self.chopmaster ~= true then
+                if not self.chopmaster and self.chopamount >= allachiv_eventdata["chopmaster"] then
                     self.chopmaster = true
-                    self:seffc(inst, "chopmaster")
+                    self:seffc(self.inst, "chopmaster")
                 end
             end
         end
     end)
 end
 
-
-
 --Mine
 function allachivevent:miner(inst)
     inst:ListenForEvent("finishedwork", function(inst, data)
-        if data.target and (data.target:HasTag("boulder") or 
-							data.target:HasTag("statue") or 
-							findprefab(rocklist, data.target.prefab)) then
-            if self.minemaster ~= true or self.mineappren ~= true then
+        if data.target and (data.target:HasTag("boulder") or data.target:HasTag("statue") or findprefab(rocklist, data.target.prefab)) then
+            if not self.minemaster or not self.mineappren then
                 self.mineamount = self.mineamount + 1
-				if self.mineamount >= allachiv_eventdata["mineappren"] and self.mineappren ~= true then
+				if not self.mineappren and self.mineamount >= allachiv_eventdata["mineappren"] then
 					self.mineappren = true
-					self:seffc(inst, "mineappren")
+					self:seffc(self.inst, "mineappren")
 				end
-                if self.mineamount >= allachiv_eventdata["minemaster"] and self.minemaster ~= true then
+                if not self.minemaster and self.mineamount >= allachiv_eventdata["minemaster"] then
                     self.minemaster = true
-                    self:seffc(inst, "minemaster")
+                    self:seffc(self.inst, "minemaster")
                 end
             end
         end

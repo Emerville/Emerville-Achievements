@@ -72,7 +72,6 @@ PrefabFiles = {
     "seffc",
     "pigking",
     "antlion",
-    "shadowwaxwell",
 	"emerdiploma",
     "cabinchair1",
     "cabinchair2",
@@ -1047,6 +1046,27 @@ local function onwakeup(self)
 end
 AddPrefabPostInit("siestahut", onwakeup)
 AddPrefabPostInit("tent", onwakeup)
+
+local function onfinishedwork_miner(inst)
+    if GLOBAL.TheWorld.ismastersim then
+        inst:DoTaskInTime(0, function()
+            local leader = inst.components.follower:GetLeader()
+            leader.components.allachivevent:miner(inst)
+        end)
+    end
+end
+
+local function onfinishedwork_lumber(inst)
+    if GLOBAL.TheWorld.ismastersim then
+        inst:DoTaskInTime(0, function()
+            local leader = inst.components.follower:GetLeader()
+            leader.components.allachivevent:chopper(inst)
+        end)
+    end
+end
+
+AddPrefabPostInit("shadowminer", onfinishedwork_miner)
+AddPrefabPostInit("shadowlumber", onfinishedwork_lumber)
 
 function GLOBAL.getFoodList(player)
     if player == nil then
