@@ -156,15 +156,12 @@ end
 function allachivcoin:hungerupcoin(inst)
     if self.coinamount >= self.hungerachivcost then
         self.hungerupamount = self.hungerupamount + 1
-		
-		-- stats are currently updated in levelsystem:onupdate
-        -- local hunger_percent = inst.components.hunger:GetPercent()
-        -- inst.components.hunger:SetMax(inst.components.hunger.max + allachiv_coindata["hungerup"])
-        -- inst.components.hunger:SetPercent(hunger_percent)
         self:coinDoDelta(-self.hungerachivcost)
 		self.starsspent = self.starsspent + self.hungerachivcost
-		self.hungerachivcost = allachiv_coinuse["hungerup"] + math.floor(self.hungerupamount/achievementcoststep["hungerup"])
+		self.hungerachivcost = allachiv_coinuse["hungerup"] + math.floor(self.hungerupamount / achievementcoststep["hungerup"])
         self:ongetcoin(inst)
+        
+        inst.components.levelsystem:UpdateMaxHunger(inst)
     end
 end
 
@@ -172,32 +169,24 @@ end
 function allachivcoin:sanityupcoin(inst)
     if self.coinamount >= self.sanityachivcost then
         self.sanityupamount = self.sanityupamount + 1
-		-- stats are currently updated in levelsystem:onupdate
-        -- local sanity_percent = inst.components.sanity:GetPercent()
-        -- inst.components.sanity:SetMax(inst.components.sanity.max + allachiv_coindata["sanityup"])
-        -- inst.components.sanity:SetPercent(sanity_percent)
         self:coinDoDelta(-self.sanityachivcost)
 		self.starsspent = self.starsspent + self.sanityachivcost
-		self.sanityachivcost = allachiv_coinuse["sanityup"] + math.floor(self.sanityupamount/achievementcoststep["sanityup"])
+		self.sanityachivcost = allachiv_coinuse["sanityup"] + math.floor(self.sanityupamount / achievementcoststep["sanityup"])
         self:ongetcoin(inst)
+        
+        inst.components.levelsystem:UpdateMaxSanity(inst)
     end
 end
 
 function allachivcoin:healthupcoin(inst)
     if self.coinamount >= self.healthachivcost then
 		self.healthupamount = self.healthupamount + 1
-		-- stats are currently updated in levelsystem:onupdate
-        -- local health_percent = inst.components.health:GetPercent()
-        -- inst.components.health:SetMaxHealth(inst.components.health.maxhealth + allachiv_coindata["healthup"])
-        -- inst.components.health:SetPercent(health_percent)
         self:coinDoDelta(-self.healthachivcost)
 		self.starsspent = self.starsspent + self.healthachivcost
-		self.healthachivcost = allachiv_coinuse["healthup"] + math.floor(self.healthupamount/achievementcoststep["healthup"])
+		self.healthachivcost = allachiv_coinuse["healthup"] + math.floor(self.healthupamount / achievementcoststep["healthup"])
         self:ongetcoin(inst)
-		--
---		local item1 = SpawnPrefab("goldcoin")
---      item1.components.stackable:SetStackSize(2)
---      inst.components.inventory:GiveItem(item1, nil, inst:GetPosition())
+        
+        inst.components.levelsystem:UpdateMaxHealth(inst)
     end
 end
 
@@ -206,7 +195,7 @@ function allachivcoin:critcoin(inst)
         self.crit = self.crit + 1
         self:coinDoDelta(-self.critachivcost)
 		self.starsspent = self.starsspent + self.critachivcost
-		self.critachivcost = allachiv_coinuse["crit"] + math.floor(self.crit/achievementcoststep["crit"])
+		self.critachivcost = allachiv_coinuse["crit"] + math.floor(self.crit / achievementcoststep["crit"])
         self:ongetcoin(inst)
     end
 end
@@ -514,6 +503,11 @@ function allachivcoin:removecoin(inst)
     self.hungerupamount = 0
     self.sanityupamount = 0
     self.healthupamount = 0
+    
+    inst.components.levelsystem:UpdateMaxHunger(inst)
+    inst.components.levelsystem:UpdateMaxSanity(inst)
+    inst.components.levelsystem:UpdateMaxHealth(inst)
+    
     self.crit = 0
 	self.scaleupamount = 0
     inst.components.allachivevent.starreset = 0

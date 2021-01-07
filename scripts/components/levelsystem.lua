@@ -19,7 +19,6 @@ local function currentzoomlevel(self,zoomlevel) self.inst.currentzoomlevel:set(z
 local function currentwidgetxpos(self,widgetxpos) self.inst.currentwidgetxpos:set(widgetxpos) end
 local function currentlanguage(self,language) self.inst.currentlanguage:set(language) end
 
-
 local levelsystem = Class(function(self, inst)
     self.inst = inst
 	self.level = 1
@@ -38,6 +37,10 @@ local levelsystem = Class(function(self, inst)
 	self.sanitycost = 1
 	self.healthcost = 1
 	
+    self.hungerbase = -1
+    self.sanitybase = -1
+    self.healthbase = -1
+    
 	self.hungermax = -1
 	self.sanitymax = -1
 	self.healthmax = -1
@@ -174,6 +177,7 @@ function levelsystem:hungeruplevel(inst)
 		self:attributepointDoDelta(-self.hungercost)
 		self.hungercost = math.min(3,1 + math.floor(self.hungerupamount/levelcoststep["hunger"]))
         self:onlevelup(inst)
+        self:UpdateMaxHunger(inst)
     end
 end
 
@@ -184,6 +188,7 @@ function levelsystem:sanityuplevel(inst)
 		self:attributepointDoDelta(-self.sanitycost)
 		self.sanitycost = math.min(3,1 + math.floor(self.sanityupamount/levelcoststep["sanity"]))
         self:onlevelup(inst)
+        self:UpdateMaxSanity(inst)
     end
 end
 
@@ -194,6 +199,7 @@ function levelsystem:healthuplevel(inst)
 		self:attributepointDoDelta(-self.healthcost)
 		self.healthcost = math.min(3,1 + math.floor(self.healthupamount/levelcoststep["health"]))
         self:onlevelup(inst)
+        self:UpdateMaxHealth(inst)
     end
 end
 
@@ -215,6 +221,10 @@ function levelsystem:removeattributepoints(inst)
 	self.hungercost = 1
     self.sanitycost = 1
     self.healthcost = 1
+    
+    self:UpdateMaxHunger(inst)
+    self:UpdateMaxSanity(inst)
+    self:UpdateMaxHealth(inst)
 
     if inst.components.health.currenthealth > 0 and not inst.components.rider:IsRiding() then
         inst.components.locomotor:Stop()
@@ -262,6 +272,30 @@ function levelsystem:intogamefn(inst)
     end)
 end
 
+function levelsystem:OnSetMaxHunger(inst, originalfn, hunger, amount, ...)
+    self.levelhungerup = self.hungerupamount
+	self.achievementhungerup = allachiv_coindata["hungerup"] * inst.currenthungerup:value()
+    self.hungermax = amount + self.achievementhungerup + self.hungerupamount
+    originalfn(hunger, self.hungermax, ...)
+    self.hungerbase = amount
+end
+
+function levelsystem:OnSetMaxSanity(inst, originalfn, sanity, amount, ...)
+    self.levelsanityup = self.sanityupamount
+	self.achievementsanityup = allachiv_coindata["sanityup"] * inst.currentsanityup:value()
+    self.sanitymax = amount + self.achievementsanityup + self.sanityupamount
+    originalfn(sanity, self.sanitymax, ...)
+    self.sanitybase = amount
+end
+
+function levelsystem:OnSetMaxHealth(inst, originalfn, health, amount, ...)
+    self.levelhealthup = self.healthupamount
+	self.achievementhealthup = allachiv_coindata["healthup"] * inst.currenthealthup:value()
+    self.healthmax = amount + self.achievementhealthup + self.healthupamount
+    originalfn(health, self.healthmax, ...)
+    self.healthbase = amount
+end
+
 function levelsystem:Init(inst)
 	--for key,value in pairs(inst.components) do print(key,value) end
 	if _G.SYSTEM_CONFIG == "both" or _G.SYSTEM_CONFIG == "level" then
@@ -273,89 +307,57 @@ function levelsystem:Init(inst)
 		end)
 	end
 
-	inst.components.combat.damagemultiplier = inst.components.combat.damagemultiplier or 1
-    inst:DoPeriodicTask(.5, function() self:onupdate(inst) end)
+    local setmaxhungerfn = inst.components.hunger.SetMax
+    local setmaxsanityfn = inst.components.sanity.SetMax
+    local setmaxhealthfn = inst.components.health.SetMaxHealth
+
+    inst.components.hunger.SetMax = function(...) self:OnSetMaxHunger(inst, setmaxhungerfn, ...) end
+    inst.components.sanity.SetMax = function(...) self:OnSetMaxSanity(inst, setmaxsanityfn, ...) end
+    inst.components.health.SetMaxHealth = function(...) self:OnSetMaxHealth(inst, setmaxhealthfn, ...) end
+    
+    -- WX-78 applyupgrades doesn't call SetMax, so we have to update level after eating and on death
+    if inst.prefab == "wx78" then
+        local originalfn = inst.components.eater.oneatfn
+        inst.components.eater:SetOnEatFn(function(inst, food, ...)
+            originalfn(inst, food, ...)
+            
+            if food and food.components.edible and food.components.edible.foodtype == FOODTYPE.GEARS then
+                self:ApplyLevels(inst)
+            end
+        end)
+        
+        inst:ListenForEvent("death", function()
+            self:ApplyLevels(inst)
+        end)
+    end
+    
+    inst:DoTaskInTime(0, function()
+        self:ApplyLevels(inst)
+    end)
 end
 
-function levelsystem:onupdate(inst)
-	--hunger
-	local achievementhungerup = allachiv_coindata["hungerup"]*inst.currenthungerup:value()
-	if achievementhungerup ~= self.achievementhungerup then
-		local hunger_percent = inst.components.hunger:GetPercent()
-		local addhunger = achievementhungerup - self.achievementhungerup
-		inst.components.hunger:SetMax(inst.components.hunger.max + addhunger)
-		inst.components.hunger:SetPercent(hunger_percent)
-		self.achievementhungerup = achievementhungerup
-		self.hungermax = inst.components.hunger.max
-	end
-	if self.hungerupamount ~= self.levelhungerup then
-        local hunger_percent = inst.components.hunger:GetPercent()
-		local addhunger = self.hungerupamount - self.levelhungerup
-        inst.components.hunger:SetMax(inst.components.hunger.max + addhunger)
-        inst.components.hunger:SetPercent(hunger_percent)
-		self.levelhungerup = self.hungerupamount
-		self.hungermax = inst.components.hunger.max
-    end
-	--in case hunger changes due to other events like when WX eats gears. Upgrades have to be applied again
-	if self.hungermax ~= inst.components.hunger.max then
-		local hunger_percent = inst.components.hunger:GetPercent()
-        inst.components.hunger:SetMax(inst.components.hunger.max + self.hungerupamount + achievementhungerup)
-        inst.components.hunger:SetPercent(hunger_percent)
-		self.hungermax = inst.components.hunger.max
-	end
-    
-	--sanity
-	local achievementsanityup = allachiv_coindata["sanityup"]*inst.currentsanityup:value()
-	if achievementsanityup ~= self.achievementsanityup then
-		local sanity_percent = inst.components.sanity:GetPercent()
-		local addsanity = achievementsanityup - self.achievementsanityup
-		inst.components.sanity:SetMax(inst.components.sanity.max + addsanity)
-		inst.components.sanity:SetPercent(sanity_percent)
-		self.achievementsanityup = achievementsanityup
-		self.sanitymax = inst.components.sanity.max
-	end
-	if self.sanityupamount ~= self.levelsanityup then
-        local sanity_percent = inst.components.sanity:GetPercent()
-		local addsanity = self.sanityupamount - self.levelsanityup
-        inst.components.sanity:SetMax(inst.components.sanity.max + addsanity)
-        inst.components.sanity:SetPercent(sanity_percent)
-		self.levelsanityup = self.sanityupamount
-		self.sanitymax = inst.components.sanity.max
-    end
-	--in case sanity changes due to other events like when WX eats gears. Upgrades have to be applied again
-	if self.sanitymax ~= inst.components.sanity.max then
-		local sanity_percent = inst.components.sanity:GetPercent()
-        inst.components.sanity:SetMax(inst.components.sanity.max + self.sanityupamount + achievementsanityup)
-        inst.components.sanity:SetPercent(sanity_percent)
-		self.sanitymax = inst.components.sanity.max
-	end
-	
-	--health
-	local achievementhealthup = allachiv_coindata["healthup"]*inst.currenthealthup:value()
-	if achievementhealthup ~= self.achievementhealthup then
-		local health_percent = inst.components.health:GetPercent()
-		local addhealth = achievementhealthup - self.achievementhealthup
-		inst.components.health.maxhealth = inst.components.health.maxhealth + addhealth
-		inst.components.health:SetPercent(health_percent)
-		self.achievementhealthup = achievementhealthup
-		self.healthmax = inst.components.health.maxhealth
-	end
-	if self.healthupamount ~= self.levelhealthup then
-        local health_percent = inst.components.health:GetPercent()
-		local addhealth = self.healthupamount - self.levelhealthup
-		inst.components.health.maxhealth = inst.components.health.maxhealth + addhealth
-		inst.components.health:SetPercent(health_percent)
-		self.levelhealthup = self.healthupamount
-		self.healthmax = inst.components.health.maxhealth
-    end
-	--in case health changes due to other events like when WX eats gears. Upgrades have to be applied again
-	if self.healthmax ~= inst.components.health.maxhealth then
-		local health_percent = inst.components.health:GetPercent()
-        inst.components.health.maxhealth = inst.components.health.maxhealth + self.healthupamount + achievementhealthup
-        inst.components.health:SetPercent(health_percent)
-		self.healthmax = inst.components.health.maxhealth
-	end
+function levelsystem:UpdateMaxHunger(inst, hungerbase)
+    local hungerpercent = inst.components.hunger:GetPercent()
+    inst.components.hunger:SetMax(hungerbase or self.hungerbase)
+    inst.components.hunger:SetPercent(hungerpercent)
+end
 
+function levelsystem:UpdateMaxSanity(inst, sanitybase)
+    local sanitypercent = inst.components.sanity:GetPercent()
+    inst.components.sanity:SetMax(sanitybase or self.sanitybase)
+    inst.components.sanity:SetPercent(sanitypercent)
+end
+
+function levelsystem:UpdateMaxHealth(inst, healthbase)
+    local healthpercent = inst.components.health:GetPercent()
+    inst.components.health:SetMaxHealth(healthbase or self.healthbase)
+    inst.components.health:SetPercent(healthpercent)
+end
+
+function levelsystem:ApplyLevels(inst)
+    self:UpdateMaxHunger(inst, inst.components.hunger.max)
+    self:UpdateMaxSanity(inst, inst.components.sanity.max)
+    self:UpdateMaxHealth(inst, inst.components.health.maxhealth)
 end
 
 --Debug
