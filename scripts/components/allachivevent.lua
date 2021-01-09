@@ -1586,11 +1586,11 @@ function allachivevent:onkilledother(inst)
         local victim = data.victim
         --Tentapillar
         if victim and victim.prefab == "tentacle_pillar" and self.tentacruel ~= true then
-            local single = true
+            local single = not inst:HasTag("ghostfriend_summoned")
             local pos = Vector3(victim.Transform:GetWorldPosition())
             local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 15)
             for k,v in pairs(ents) do
-                if (v:HasTag("player") or v.prefab == "bunnyman" or v.prefab == "hutch" or v.prefab == "rocky" or v.prefab == "pigman" or v.prefab == "abigail") and v ~= inst then
+                if (v:HasTag("player") or v.prefab == "bunnyman" or v.prefab == "hutch" or v.prefab == "rocky" or v.prefab == "pigman") and v ~= inst then
                     single = false
                 end
             end
