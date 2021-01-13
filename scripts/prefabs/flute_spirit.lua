@@ -53,7 +53,7 @@ local function Play_fn(inst, musician)
 			end
 		end
 
-	ShakeAllCameras(CAMERASHAKE.FULL, 2, 0.05, .5, 40)
+	ShakeAllCameras(CAMERASHAKE.FULL, 2, 0.05, .5, musician, 40)
 	musician.SoundEmitter:PlaySound("dontstarve/maxwell/throne_scream", "throne") 
 	musician.SoundEmitter:SetVolume("throne", 0.6)
 
@@ -79,13 +79,13 @@ local function Play_fn(inst, musician)
                 shadow.SoundEmitter:PlaySound("dontstarve/maxwell/disappear")
                 shadow.Transform:SetPosition((pt + result_offset):Get())
 				
-				ShakeAllCameras(CAMERASHAKE.FULL, 2, 0.01, .3, 40)
+				ShakeAllCameras(CAMERASHAKE.FULL, 2, 0.01, .3, musician, 40)
 				
                 local fx = SpawnPrefab("maxwell_smoke")
                 local pos = pt + result_offset
                 fx.Transform:SetPosition(pos.x, pos.y, pos.z)
 				shadow:DoTaskInTime(1, function()
-					ShakeAllCameras(CAMERASHAKE.FULL, 2, 0.01, .5, 40)
+					ShakeAllCameras(CAMERASHAKE.FULL, 2, 0.01, .5, musician, 40)
 					shadow.SoundEmitter:PlaySound("dontstarve/maxwell/talk_LP_world3", "talking")
 					shadow.AnimState:PlayAnimation("dialog5_pre")
 						shadow.components.talker.fontsize = 40
@@ -100,7 +100,7 @@ local function Play_fn(inst, musician)
 											shadow.SoundEmitter:KillSound("talking")
 											shadow.AnimState:PlayAnimation("disappear5")
 												shadow:DoTaskInTime(0.7, function()
-													ShakeAllCameras(CAMERASHAKE.FULL, 0.5, 0.08, .5, 40)
+													ShakeAllCameras(CAMERASHAKE.FULL, 0.5, 0.08, .5, musician, 40)
 													shadow.SoundEmitter:PlaySound("dontstarve/maxwell/disappear")
 													local fx = SpawnPrefab("maxwell_smoke")
 													fx.Transform:SetPosition(pos.x, pos.y, pos.z)
