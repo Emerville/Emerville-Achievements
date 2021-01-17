@@ -441,7 +441,7 @@ nil, -- numtogive
 --[[ ARTS DEGREE ]]
 --------------------------------------------------------------------------
 local flute_light = AddRecipe("flute_light",
-{Ingredient("papyrus", 2), Ingredient("nightmarefuel", 2), Ingredient("manure", 1)},
+{Ingredient("papyrus", 2), Ingredient("nightmarefuel", 2), Ingredient("poop", 1)},
 RECIPETABS.PERK_TAB, 
 TECH.NONE,
 nil,
