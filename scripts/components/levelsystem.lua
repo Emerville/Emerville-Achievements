@@ -326,8 +326,15 @@ function levelsystem:Init(inst)
             end
         end)
         
-        inst:ListenForEvent("death", function()
-            self:ApplyLevels(inst)
+        inst:ListenForEvent("respawnfromghost", function()
+            -- We need a cleaner way to detect if WX-78 "deleveled" on death -P
+            if inst.components.health.maxhealth ~= self.healthmax then
+                self:ApplyLevels(inst)
+            else
+                self:UpdateMaxHunger(inst, self.hungerbase)
+                self:UpdateMaxSanity(inst, self.sanitybase)
+                self:UpdateMaxHealth(inst, self.healthbase)
+            end
         end)
     end
     
