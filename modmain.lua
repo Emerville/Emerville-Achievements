@@ -321,7 +321,7 @@ stampede.atlas = "images/inventoryimages/stampede.xml"
 stampede.image = "stampede.tex"
 stampede.product = "stampede"
 
-local hornucopia = AddRecipe("hornucopia",
+local hornucopia = AddRecipe("hornucopia_perk",
 {Ingredient("minotaurhorn", 1),Ingredient("horn", 1),Ingredient("bonestew", 3)},  
 RECIPETABS.PERK_TAB,
 TECH.NONE,
