@@ -1,5 +1,7 @@
 require "prefabutil"
 
+local cooking = require("cooking")
+
 local assets =
 {
     Asset("ANIM", "anim/diningtable.zip"),
@@ -12,6 +14,15 @@ local prefabs =
 {
     "collapse_small",
 }
+
+local function setsymbol(inst, product)
+    local recipe = cooking.GetRecipe("cookpot", product)
+    local build = (recipe and recipe.overridebuild) or "cook_pot_food"
+    local overridesymbol = (recipe and recipe.overridesymbol) or product
+
+    inst.AnimState:ShowSymbol("swap_flower")
+    inst.AnimState:OverrideSymbol("swap_flower", build, overridesymbol)
+end
 
 local function onhammered(inst)
     inst.components.dining:DropFood()
@@ -57,15 +68,8 @@ local function onload(inst, data)
     inst.foodhealth = data.foodhealth
     inst.foodsanity = data.foodsanity
     inst.foodnum = data.foodnum
-    
-    local product = inst.foodname
-    
-    inst.AnimState:ShowSymbol("swap_flower")
-    if IsModCookingProduct("cookpot", product) then
-        inst.AnimState:OverrideSymbol("swap_flower", product, product)
-    else
-        inst.AnimState:OverrideSymbol("swap_flower", "cook_pot_food", product)
-    end
+
+    setsymbol(inst, inst.foodname)
 end
 
 local function abletoaccepttest(inst, item)
@@ -90,20 +94,12 @@ local function ongivenitem(inst, giver, item)
         inst.foodhealth = item.components.edible.healthvalue * TUNING.DINING_BUFF
         inst.foodsanity = item.components.edible.sanityvalue * TUNING.DINING_BUFF
         inst.foodnum = count
-        
-        local product = inst.foodname
-        
-        inst.AnimState:ShowSymbol("swap_flower")
-        if IsModCookingProduct("cookpot", product) then
-            inst.AnimState:OverrideSymbol("swap_flower", product, product)
-        else
-            inst.AnimState:OverrideSymbol("swap_flower", "cook_pot_food", product)
-        end
+
+        setsymbol(inst, inst.foodname)
     else
         inst.foodnum = inst.foodnum + count
     end
 end
-
 
 --For future reference about spiced food. Added by me (Luis) on November 22, 2020, so I can attempt to fix invisible spiced food.
 
