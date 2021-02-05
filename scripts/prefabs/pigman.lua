@@ -193,7 +193,11 @@ local builds = { "pig_build", "pigspotted_build" }
 local guardbuilds = { "pig_guard_build" }
 
 local function NormalRetargetFn(inst)
-	local exclude_tags = { "playerghost", "INLIMBO" }
+    if inst:HasTag("NPC_contestant") then
+        return nil
+    end    
+
+	local exclude_tags = { "playerghost", "INLIMBO" , "NPC_contestant" }
 	if inst.components.follower.leader ~= nil then
 		table.insert(exclude_tags, "abigail")
 	end
@@ -574,6 +578,10 @@ local function common(moonbeast)
     inst.AnimState:SetBank("pigman")
     inst.AnimState:PlayAnimation("idle_loop", true)
     inst.AnimState:Hide("hat")
+
+    if IsSpecialEventActive(SPECIAL_EVENTS.YOTB) then
+        inst.AnimState:AddOverrideBuild("pigman_yotb")
+    end
 
     --Sneak these into pristine state for optimization
     inst:AddTag("_named")
