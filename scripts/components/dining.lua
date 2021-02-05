@@ -6,13 +6,6 @@ function Dining:GetFood()
     if self.inst.foodname then
         local food = SpawnPrefab(self.inst.foodname)
 
-        self.inst.foodnum = self.inst.foodnum - 1
-
-        if self.inst.foodnum == 0 then
-            self.inst.foodname = nil
-            self.inst.AnimState:HideSymbol("swap_flower")
-        end
-
         food.components.edible.healthvalue = food.components.edible.healthvalue * TUNING.DINING_BUFF
         food.components.edible.hungervalue = food.components.edible.hungervalue * TUNING.DINING_BUFF
         food.components.edible.sanityvalue = food.components.edible.sanityvalue * TUNING.DINING_BUFF
@@ -40,6 +33,30 @@ function Dining:DropFood()
     self.inst.foodname = nil
     self.inst.foodnum = 0
     self.inst.AnimState:HideSymbol("swap_flower")
+end
+
+function Dining:Dine(doer)
+    if doer and doer.components.eater then
+        local food = self:GetFood()
+        
+        if not food then
+            return false
+        end
+        
+        if doer.components.eater:Eat(food, doer) then
+            self.inst.foodnum = self.inst.foodnum - 1
+
+            if self.inst.foodnum == 0 then
+                self.inst.foodname = nil
+                self.inst.AnimState:HideSymbol("swap_flower")
+            end
+        else
+            doer:PushEvent("wonteatfood", { food = food })
+            food:Remove()
+        end
+        
+        return true
+    end
 end
 
 return Dining

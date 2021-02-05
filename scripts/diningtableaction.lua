@@ -6,11 +6,9 @@ local DINE = GLOBAL.Action({ mount_valid = true })
 DINE.str = "Dine"
 DINE.id = "DINE"
 DINE.fn = function(act)
-    if act.doer and act.target and act.target.components.dining and act.target.foodname then
-        act.doer.components.eater:Eat(act.target.components.dining:GetFood(), act.doer)
-        return true
+    if act.doer and act.target and act.target.components.dining then
+        return act.target.components.dining:Dine(act.doer)
     end
-    return false
 end
 
 AddAction(DINE)
