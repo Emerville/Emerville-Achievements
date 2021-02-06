@@ -33,9 +33,13 @@ local function onhammered(inst)
     inst:Remove()
 end
 
-local function onhit(inst, worker, workleft)
-    inst.components.dining:DropFood()
-    if workleft > 0 then
+local function onhit(inst, worker, workleft, numworks)
+    if inst.foodname then
+        inst.components.dining:DropFood()
+        inst.components.workable.workleft = workleft + numworks
+    end
+
+    if inst.components.workable.workleft > 0 then
         inst.SoundEmitter:PlaySound("dontstarve/creatures/together/stagehand/hit")
         inst.AnimState:PlayAnimation("hit")
         inst.AnimState:PushAnimation("idle")
