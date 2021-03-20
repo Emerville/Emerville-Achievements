@@ -10,7 +10,7 @@ Spend achievement stars to upgrade stats or unlock permanent abilities.
 If you complete all achievements you can enable multiple playthroughs in the mod configuration.
 ]]
 author = "Lavax" --Modified by Luis95R for Emerville
-version = "1.2.9"
+version = "1.2.10"
 priority = -1000
 server_filter_tags = {"achievement", "level"}
 
