@@ -1159,5 +1159,22 @@ if GLOBAL.TUNING.TELEPORTATOMOD then
 		end)
 	end)
 end
+
+--Removed antlion.lua from scripts/prefabs. Fix for Antlion spawning outside of summer. --KoreanWaffles
+AddPrefabPostInit("antlion", function(inst)
+    local _OnGivenItem = inst.components.trader.onaccept
+    inst.components.trader.onaccept = function(inst, giver, item)
+        if item.prefab == "heatrock" and item.currentTempRange > 1 and item.currentTempRange < 4 then
+            if giver.components.allachivevent and giver.components.allachivevent.fuzzy ~= true then
+                giver.components.allachivevent.fuzzyamount = giver.components.allachivevent.fuzzyamount + 1
+                if giver.components.allachivevent.fuzzyamount >= allachiv_eventdata["fuzzy"] then
+                    giver.components.allachivevent.fuzzy = true
+                    giver.components.allachivevent:seffc(giver, "fuzzy")
+                end
+            end
+        end
+        _OnGivenItem(inst, giver, item)
+    end
+end)
 -- ##################
 -- ##################
