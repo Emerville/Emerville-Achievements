@@ -1162,6 +1162,7 @@ end
 
 --Removed antlion.lua from scripts/prefabs. Fix for Antlion spawning outside of summer. --KoreanWaffles
 AddPrefabPostInit("antlion", function(inst)
+    if not GLOBAL.TheNet:GetIsServer() then return end
     local _OnGivenItem = inst.components.trader.onaccept
     inst.components.trader.onaccept = function(inst, giver, item)
         if item.prefab == "heatrock" and item.currentTempRange > 1 and item.currentTempRange < 4 then
