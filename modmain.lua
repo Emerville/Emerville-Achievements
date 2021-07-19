@@ -1168,7 +1168,7 @@ AddPrefabPostInit("antlion", function(inst)
         if item.prefab == "heatrock" and item.currentTempRange > 1 and item.currentTempRange < 4 then
             if giver.components.allachivevent and giver.components.allachivevent.fuzzy ~= true then
                 giver.components.allachivevent.fuzzyamount = giver.components.allachivevent.fuzzyamount + 1
-                if giver.components.allachivevent.fuzzyamount >= allachiv_eventdata["fuzzy"] then
+                if giver.components.allachivevent.fuzzyamount >= GLOBAL.allachiv_eventdata["fuzzy"] then
                     giver.components.allachivevent.fuzzy = true
                     giver.components.allachivevent:seffc(giver, "fuzzy")
                 end
