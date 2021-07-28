@@ -2710,23 +2710,17 @@ function allachivevent:hitother(inst)
 		end
 	end					
 		if self.whack ~= true and data.weapon then
-			if data.weapon.prefab == "cane" or
-			   data.weapon.prefab == "greencane" or
-			   data.weapon.prefab == "bluecane" or 
-			   data.weapon.prefab == "redcane" or 
-			   data.weapon.prefab == "blackcane" or
-			   data.weapon.prefab == "chromecane" or
-			   data.weapon.prefab == "pinkcane" then
-			if data.damage and data.damage >= 0 then
-                self.whackamount = math.ceil(self.whackamount + data.damage)
-            end
-			if self.whackamount >= allachiv_eventdata["whack"] then
-                self.whackamount = allachiv_eventdata["whack"]
-                self.whack = true
-                self:seffc(inst, "whack")
-            end
-		end	
-	end
+			if data.weapon.prefab == "cane" or data.weapon:HasTag("cane") then
+                if data.damage and data.damage >= 0 then
+                    self.whackamount = math.ceil(self.whackamount + data.damage)
+                end
+                if self.whackamount >= allachiv_eventdata["whack"] then
+                    self.whackamount = allachiv_eventdata["whack"]
+                    self.whack = true
+                    self:seffc(inst, "whack")
+                end
+            end	
+        end
 		if self.bullseye ~= true and data.weapon and data.weapon.prefab == "blowdart_pipe" then
 			if data.damage and data.damage >= 0 then
                 self.bullseyeamount = math.ceil(self.bullseyeamount + data.damage)
