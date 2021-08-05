@@ -758,6 +758,7 @@ AddPlayerPostInit(function(inst)
 	inst.currentartsdegree = GLOBAL.net_shortint(inst.GUID,"currentartsdegree")
 	inst.currentlunarcraft = GLOBAL.net_shortint(inst.GUID,"currentlunarcraft")
 	inst.currentbusinessowner = GLOBAL.net_shortint(inst.GUID,"currentbusinessowner")
+	inst.currenthomeowner = GLOBAL.net_shortint(inst.GUID,"currenthomeowner")
 	inst.currentminemaster = GLOBAL.net_shortint(inst.GUID,"currentminemaster")
 	inst.currentancientstation = GLOBAL.net_shortint(inst.GUID,"currentancientstation")
 	

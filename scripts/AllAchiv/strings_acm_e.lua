@@ -214,6 +214,7 @@ STRINGS.PERKNAME={
 ["ancientstation"] = "Ancient Research",
 ["lunarcraft"] = "Lunar Craft",
 ["businessowner"] = "Restaurant Owner",
+["homeowner"] = "[COMING SOON]",
 ["animallover"] = "Animal Whisperer",
 }
 
@@ -366,6 +367,7 @@ STRINGS.PERKDESC={
 ["ancientstation"] = "Gain the ability to craft advanced Ancient Pseudoscience items",
 ["lunarcraft"] = "Gain the ability to craft lunar items",
 ["businessowner"] = "Gain the ability to craft structures to start a restaurant.",
+["homeowner"] = "Gain the ability to build a house.",
 ["animallover"] = "Animals are not scared of you",
 }
 

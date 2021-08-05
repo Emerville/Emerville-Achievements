@@ -1372,7 +1372,7 @@ end
 -- Achievements Categories
 local perk_attributes = 5
 local perk_abilities = 5
-local perk_crafting = 4
+local perk_crafting = 5
 
 function uiachievement:perk_build()
 	local x = 1
@@ -2192,6 +2192,10 @@ function uiachievement:loadcoinlist()
 		{
 			name = "businessowner",
 			current = self.owner.currentbusinessowner:value(),
+		},
+		{
+			name = "homeowner",
+			current = self.owner.currenthomeowner:value(),
 		},
 	}
 	

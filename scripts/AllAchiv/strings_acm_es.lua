@@ -214,6 +214,7 @@ STRINGS.PERKNAME={
 ["ancientstation"] = "Sabiduría antigüa",
 ["lunarcraft"] = "Selenólogo experto",
 ["businessowner"] = "Dueño de negocio",
+["homeowner"] = "MUY PRONTO",
 ["animallover"] = "Amigo del bosque",
 }
 
@@ -366,6 +367,7 @@ STRINGS.PERKDESC={
 ["ancientstation"] = "Gana la habilidad de crear cosas avanzadas de la Estación de Pseudo-Ciencia Antigüa",
 ["lunarcraft"] = "Gana la habilidad de crear objetos lunares",
 ["businessowner"] = "Gana la habilidad de crear estructuras para comenzar un negocio",
+["homeowner"] = "Gana la habilidad de crear una casa",
 ["animallover"] = "Los animales no se asustarán de tí",
 }
 

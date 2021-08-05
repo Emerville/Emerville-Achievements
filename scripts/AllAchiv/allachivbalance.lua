@@ -293,6 +293,7 @@ allachiv_coinuse={
 ["ancientstation"] = math.ceil(75*_G.MULT_CONFIG),
 ["lunarcraft"] = math.ceil(50*_G.MULT_CONFIG),
 ["businessowner"] = math.ceil(99*_G.MULT_CONFIG),
+["homeowner"] = 0,
 ["animallover"] = math.ceil(50*_G.MULT_CONFIG),
 }
 

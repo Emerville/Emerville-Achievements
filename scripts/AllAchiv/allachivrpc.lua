@@ -41,6 +41,10 @@ AddModRPCHandler("DSTAchievement", "businessowner", function(player)
 	player.components.allachivcoin:businessownercoin(player)
 end)
 
+AddModRPCHandler("DSTAchievement", "homeowner", function(player)
+	player.components.allachivcoin:homeownercoin(player)
+end)
+
 AddModRPCHandler("DSTAchievement", "lunarcraft", function(player)
 	player.components.allachivcoin:lunarcraftcoin(player)
 end)
