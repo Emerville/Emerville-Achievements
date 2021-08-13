@@ -350,6 +350,7 @@ rocklist = {
     ["stalagmite_tall_low"] = true,
     ["stalagmite_tall_med"] = true,
     ["stalagmite_tall_full"] = true,
+    ["moonstorm_glass"] = true,
 }
 
 foodmenu = { "baconeggs", "butterflymuffin", "dragonpie", "fishtacos",
