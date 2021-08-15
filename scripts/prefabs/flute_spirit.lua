@@ -31,7 +31,6 @@ local function OnDamageAll(musician, pt)
     local ents = TheSim:FindEntities(pt.x,pt.y,pt.z, range, nil, { "INLIMBO", "playerghost", "player", "companion", "abigail" })
 
     for k,v in pairs(ents) do
-        local collapse = SpawnPrefab("collapse_big")
         local collapse2 = SpawnPrefab("explode_small")
         local tpos = Vector3(v.Transform:GetWorldPosition())
 
