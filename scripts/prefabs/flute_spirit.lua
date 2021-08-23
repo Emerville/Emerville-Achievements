@@ -31,12 +31,12 @@ local function OnDamageAll(musician, pt)
     local ents = TheSim:FindEntities(pt.x,pt.y,pt.z, range, nil, { "INLIMBO", "playerghost", "player", "companion", "abigail" })
 
     for k,v in pairs(ents) do
-        local collapse2 = SpawnPrefab("explode_small")
-        local tpos = Vector3(v.Transform:GetWorldPosition())
-
         if v.components.health and v.components.combat then
+            local fx = SpawnPrefab("explode_small")
+            local tpos = Vector3(v.Transform:GetWorldPosition())
+            fx.Transform:SetPosition(tpos.x, 0, tpos.z)
+
             v.components.health:DoDelta(-200)
-            collapse2.Transform:SetPosition(tpos.x, 0, tpos.z)
             if v.sg and v.sg.sg.states.hit and not v.components.health:IsDead() then
                 v.sg:GoToState("hit")
             end
