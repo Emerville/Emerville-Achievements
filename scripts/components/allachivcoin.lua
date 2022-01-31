@@ -18,7 +18,7 @@ local function currentcookmaster(self,cookmaster) local c = 0 if cookmaster then
 local function currentpickmaster(self,pickmaster) local c = 0 if pickmaster then c=1 end self.inst.currentpickmaster:set(c) end
 local function currentlunarcraft(self,lunarcraft) local c = 0 if lunarcraft then c=1 end self.inst.currentlunarcraft:set(c) end
 local function currentbusinessowner(self,businessowner) local c = 0 if businessowner then c=1 end self.inst.currentbusinessowner:set(c) end
---local function currenthomeowner(self,homeowner) local c = 0 if homeowner then c=1 end self.inst.currenthomeowner:set(c) end
+local function currenthomeowner(self,homeowner) local c = 0 if homeowner then c=1 end self.inst.currenthomeowner:set(c) end
 local function currentartsdegree(self,artsdegree) local c = 0 if artsdegree then c=1 end self.inst.currentartsdegree:set(c) end
 
 local function currentminemaster(self,minemaster) local c = 0 if minemaster then c=1 end self.inst.currentminemaster:set(c) end
@@ -56,7 +56,7 @@ local allachivcoin = Class(function(self, inst)
     self.pickmaster = false
 	self.lunarcraft = false
 	self.businessowner = false
---	self.homeowner = false
+	self.homeowner = false
     self.artsdegree = false
 	self.minemaster = false
 	self.anicentstation = false
@@ -85,7 +85,7 @@ nil,
     pickmaster = currentpickmaster,
 	lunarcraft = currentlunarcraft,
 	businessowner = currentbusinessowner,
---	homeowner = currenthomeowner,
+	homeowner = currenthomeowner,
     artsdegree = currentartsdegree,
 	
 	minemaster = currentminemaster,
@@ -108,7 +108,7 @@ function allachivcoin:OnSave()
         pickmaster = self.pickmaster,
 		lunarcraft = self.lunarcraft,
 		businessowner = self.businessowner,
---		homeowner = self.homeowner,
+		homeowner = self.homeowner,
         artsdegree = self.artsdegree,
 		minemaster = self.minemaster,
 		ancientstation = self.ancientstation,
@@ -137,7 +137,7 @@ function allachivcoin:OnLoad(data)
     self.pickmaster = data.pickmaster or false
 	self.lunarcraft = data.lunarcraft or false
 	self.businessowner = data.businessowner or false
---	self.homeowner = data.homeowner or false
+	self.homeowner = data.homeowner or false
     self.artsdegree = data.artsdegree or false
 	self.minemaster = data.minemaster or false
 	self.ancientstation = data.ancientstation or false
@@ -319,7 +319,7 @@ function allachivcoin:animalloverfn(inst)
 	end
 end
 
---双倍采集获取
+--Double Gathering
 function allachivcoin:pickmastercoin(inst)
     if self.pickmaster ~= true and self.coinamount >= allachiv_coinuse["pickmaster"] then
         self.pickmaster = true
@@ -329,7 +329,7 @@ function allachivcoin:pickmastercoin(inst)
     end
 end
 
---双倍采集效果
+--Double Gather Effect
 function allachivcoin:pickmasterfn(inst)
     inst:ListenForEvent("picksomething", function(inst, data)
         if self.pickmaster and data.object and data.object.components.pickable and not data.object.components.trader then
@@ -432,25 +432,22 @@ function allachivcoin:businessownerfn(inst)
 end
 
 function allachivcoin:homeownercoin(inst, player)
-    --[[if self.homeowner ~= true and self.coinamount >= allachiv_coinuse["homeowner"] then
+    if self.homeowner ~= true and self.coinamount >= allachiv_coinuse["homeowner"] then
         self.homeowner = true
 		self.starsspent = self.starsspent + allachiv_coinuse["homeowner"]
         self:coinDoDelta(-allachiv_coinuse["homeowner"])
         self:homeownerfn(inst)
-        local item1 = SpawnPrefab("boards")
-        item1.components.stackable:SetStackSize(10)
-        inst.components.inventory:GiveItem(item1, nil, inst:GetPosition())
         self:ongetcoin(inst)
-   end]]
+   end
 end
 
---function allachivcoin:homeownerfn(inst)
---    if self.homeowner then
---        inst:AddTag("homeowner")
---    end
---end
+function allachivcoin:homeownerfn(inst)
+    if self.homeowner then
+        inst:AddTag("homeowner")
+    end
+end
 
---书籍阅读获取
+--Flute Crafting
 function allachivcoin:artsdegreecoin(inst)
     if self.artsdegree ~= true and self.coinamount >= allachiv_coinuse["artsdegree"] then
         self.artsdegree = true
@@ -464,7 +461,7 @@ function allachivcoin:artsdegreecoin(inst)
     end
 end
 
---Book Reading Effect
+--Flute Playing Effect
 function allachivcoin:artsdegreefn(inst)
     if self.artsdegree then
         inst:AddTag("artsdegree")
@@ -518,7 +515,7 @@ function allachivcoin:addcoins(inst)
 	self.coinamount = self.coinamount + 100
 end
 
---重置奖励
+--Reset Rewards
 function allachivcoin:removecoin(inst)
 
     self.coinamount = self.coinamount + math.ceil(self.starsspent*reset_refund_percentage)
@@ -572,7 +569,7 @@ function allachivcoin:resetbuff(inst)
 	inst:RemoveTag("ancientstation")
 	inst:RemoveTag("lunarcraft")
 	inst:RemoveTag("businessowner")
---	inst:RemoveTag("homeowner")
+	inst:RemoveTag("homeowner")
 	inst:RemoveTag("animallover")
 	if self.animallover then inst:AddTag("scarytoprey") end
     inst:RemoveTag("artsdegree")
@@ -582,13 +579,13 @@ function allachivcoin:resetbuff(inst)
     end
 end
 
---预运行
+--Pre-Run
 function allachivcoin:Init(inst)
 	if _G.SYSTEM_CONFIG == "both" or _G.SYSTEM_CONFIG == "achieve" then
 		inst:DoTaskInTime(.1, function()
 			self:lunarcraftfn(inst)
 			self:businessownerfn(inst)
---			self:homeownerfn(inst)
+			self:homeownerfn(inst)
 			self:cookmasterfn(inst)
 			self:pickmasterfn(inst)
 			self:animalloverfn(inst)

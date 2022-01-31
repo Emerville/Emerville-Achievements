@@ -133,6 +133,7 @@ allachiv_eventdata={
 ["fullhunger"] = 60*30,
 ["pacifist"] = 60*60,
 }
+
 ----------------------------
 --[STAR AMOUNT]
 ----------------------------
@@ -268,7 +269,7 @@ allachiv_coinget={
 ["pacifist"] = 3,
 }
 
---奖励获得数值
+--Get Rewards Value
 allachiv_coindata={
 ["hungerup"] = 1,
 ["sanityup"] = 1,
@@ -278,7 +279,7 @@ allachiv_coindata={
 ["krampusxmas"] = .03,
 }
 
---奖励消耗点数
+--Reward Consumption Points
 allachiv_coinuse={
 ["hungerup"] = math.ceil(1*_G.MULT_CONFIG),
 ["sanityup"] = math.ceil(1*_G.MULT_CONFIG),
@@ -293,7 +294,7 @@ allachiv_coinuse={
 ["ancientstation"] = math.ceil(75*_G.MULT_CONFIG),
 ["lunarcraft"] = math.ceil(50*_G.MULT_CONFIG),
 ["businessowner"] = math.ceil(99*_G.MULT_CONFIG),
-["homeowner"] = 0,
+["homeowner"] = math.ceil(50*_G.MULT_CONFIG),
 ["animallover"] = math.ceil(50*_G.MULT_CONFIG),
 }
 

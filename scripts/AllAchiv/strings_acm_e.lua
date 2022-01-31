@@ -214,7 +214,7 @@ STRINGS.PERKNAME={
 ["ancientstation"] = "Ancient Research",
 ["lunarcraft"] = "Lunar Craft",
 ["businessowner"] = "Restaurant Owner",
-["homeowner"] = "[COMING SOON]",
+["homeowner"] = "House Architect",
 ["animallover"] = "Animal Whisperer",
 }
 
@@ -360,15 +360,15 @@ STRINGS.PERKDESC={
 ["crit"] = "Increase chance to deal double damage by "..(allachiv_coindata["crit"]*100).."%",
 ["scale"] = "Increase the size of your character by "..(math.ceil(allachiv_coindata["scale"]*100)).."%",
 ["krampusxmas"] = "Increase the drop chance of Krampus Sack to "..(math.ceil(allachiv_coindata["krampusxmas"]*100)).."%",
-["cookmaster"] = "Produce crock pot dishes instantly",
-["pickmaster"] = "Double items from gathering",
+["cookmaster"] = "Produce crock pot dishes instantly.",
+["pickmaster"] = "Double items from gathering.",
 ["artsdegree"] = "Gain the ability to craft magical flutes.",
-["minemaster"] = "Mine stones instantly",
+["minemaster"] = "Mine rocks instantly.",
 ["ancientstation"] = "Gain the ability to craft advanced Ancient Pseudoscience items",
-["lunarcraft"] = "Gain the ability to craft lunar items",
+["lunarcraft"] = "Gain the ability to craft Lunar items.",
 ["businessowner"] = "Gain the ability to craft structures to start a restaurant.",
-["homeowner"] = "Gain the ability to build a house.",
-["animallover"] = "Animals are not scared of you",
+["homeowner"] = "Gain the ability to build better houses.",
+["animallover"] = "Animals are no longer scared of you.",
 }
 
 STRINGS.ALLACHIVINFO={

@@ -23,7 +23,6 @@ _G.EXPMULT = GetModConfigData('EXPMULT')
 _G.LEVELXP = GetModConfigData('LEVELXP')
 _G.LEVELPOINTS = GetModConfigData('LEVELPOINTS')
 
-
 require 'AllAchiv/allachivbalance'
 require "AllAchiv/allachivrpc"
 _G.LANGUAGE = GetModConfigData('LANGUAGE')
@@ -49,8 +48,6 @@ else
 	require 'AllAchiv/strings_acm_e'
 end
 
-
-
 local MANRESPAWN = GetModConfigData('MANDRAKEBOI')
 if MANRESPAWN then
     if GLOBAL.STRINGS.NAMES.MIGRATION_PORTAL then
@@ -73,6 +70,7 @@ PrefabFiles = {
     "pigking",
     "antlion",
 	"emerdiploma",
+	"weaponsrack",
     "cabinchair1",
     "cabinchair2",
     "girlychair1",
@@ -80,7 +78,6 @@ PrefabFiles = {
     "circuschair1",	
     "circuschair2",
 	"diningtable",	
-	"uncompromising_rat",
 	"luis_rat",
 	"mario_rat",
 	"whisper_rat",
@@ -333,6 +330,22 @@ nil,
 hornucopia.atlas = "images/inventoryimages/hornucopia.xml"
 hornucopia.image = "hornucopia.tex"
 hornucopia.product = "hornucopia"
+
+--------------------------------------------------------------------------
+--[[ INTERIOR DECORATOR ]]
+--------------------------------------------------------------------------
+--[[local weaponsrack = AddRecipe("weaponsrack", 
+{Ingredient("boards", 10), Ingredient("rope", 1), Ingredient("spear", 1)}, 
+RECIPETABS.PERK_TAB,
+TECH.LOST, 
+"weaponsrack_placer",
+1,
+nil,
+nil,
+"homeowner")
+weaponsrack.atlas = "images/inventoryimages/weaponsrack.xml"
+weaponsrack.image = "weaponsrack.tex"
+weaponsrack.product = "weaponsrack"]]
 
 --------------------------------------------------------------------------
 --[[ BUSINESS OWNER ]]
@@ -1017,6 +1030,20 @@ STRINGS.CHARACTERS.GENERIC.DESCRIBE.MARIO_RAT         = "Mario is the rat respon
 --Whisper Rat
 STRINGS.NAMES.WHISPER_RAT = "Whisper the Rat"
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.WHISPER_RAT       = "Whisper is the rat queen."
+------------------------------------------------------------------------------------------------------------
+STRINGS.NAMES.WEAPONSRACK = "Weapons Rack"
+STRINGS.RECIPE_DESC.WEAPONSRACK = "Warrior storage."
+
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.WEAPONSRACK = "A place to store weapons."
+STRINGS.CHARACTERS.WILLOW.DESCRIBE.WEAPONSRACK = "This is where we keep all the sharp and stabby things!"
+STRINGS.CHARACTERS.WENDY.DESCRIBE.WEAPONSRACK = "Words hurt more than the contents inside."
+STRINGS.CHARACTERS.WICKERBOTTOM.DESCRIBE.WEAPONSRACK = "No better defense than a good offense."
+STRINGS.CHARACTERS.WAXWELL.DESCRIBE.WEAPONSRACK = "I prefer weapons of the intangible sort."
+STRINGS.CHARACTERS.WX78.DESCRIBE.WEAPONSRACK = "DEATHRACK."
+STRINGS.CHARACTERS.WOODIE.DESCRIBE.WEAPONSRACK = "Perfect, some weapons we can fend ourselves with."
+STRINGS.CHARACTERS.WOLFGANG.DESCRIBE.WEAPONSRACK = "Wolfgang's arms are much stronger."
+STRINGS.CHARACTERS.WEBBER.DESCRIBE.WEAPONSRACK = "Better to be protected than not."
+STRINGS.CHARACTERS.WATHGRITHR.DESCRIBE.WEAPONSRACK = "To arms!"
 
 
 AddComponentPostInit("crop", function(self)
