@@ -480,7 +480,6 @@ function allachivevent:OnSave()
 		eatfishamount = self.eatfishamount,
 		eatturkey = self.eatturkey,
 		eatturkeyamount = self.eatturkeyamount,
-        eattemp = self.eattemp,
         eathot = self.eathot,
         eathotamount = self.eathotamount,
         eatcold = self.eatcold,
@@ -705,7 +704,6 @@ function allachivevent:OnLoad(data)
 	self.eatfishamount = data.eatfishamount or 0
 	self.eatturkey = data.eatturkey or false
 	self.eatturkeyamount = data.eatturkeyamount or 0
-    self.eattemp = data.eattemp or false
     self.eathot = data.eathot or false
     self.eatcold = data.eatcold or false
     self.eathotamount = data.eathotamount or 0
@@ -952,7 +950,6 @@ function allachivevent:intogamefn(inst)
 				self.eatfishamount = achievements["eatfishamount"]
 				self.eatturkey = achievements["eatturkey"]
 				self.eatturkeyamount = achievements["eatturkeyamount"]
-                self.eattemp = achievements["eattemp"]
                 self.eathot = achievements["eathot"]
                 self.eatcold = achievements["eatcold"]
                 self.eathotamount = achievements["eathotamount"]
@@ -2917,7 +2914,6 @@ function allachivevent:onreroll(inst)
 				SaveAchieve["eatfishamount"] = self.eatfishamount or 0
 				SaveAchieve["eatturkey"] = self.eatturkey or false
 				SaveAchieve["eatturkeyamount"] = self.eatturkeyamount or 0
-                SaveAchieve["eattemp"] = self.eattemp or false
                 SaveAchieve["eathot"] = self.eathot or false
                 SaveAchieve["eatcold"] = self.eatcold or false
                 SaveAchieve["eathotamount"] = self.eathotamount or 0
