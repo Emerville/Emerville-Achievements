@@ -35,7 +35,14 @@ end
 
 local function onhit(inst, worker, workleft, numworks)
     if inst.foodname then
-        inst.components.dining:DropFood()
+        if inst:HasTag("uid_private") then
+            if worker.userid and inst:HasTag("uid_"..worker.userid)
+                or worker.Network and worker.Network:IsServerAdmin() then
+                inst.components.dining:DropFood()
+            end
+        else
+            inst.components.dining:DropFood()
+        end
         inst.components.workable.workleft = workleft + numworks
     end
 
