@@ -19,7 +19,7 @@ end)
 --Removed blinkstaff.lua from scripts/prefabs. Fix for crash on orange staff reskin. --Platypus
 AddPrefabPostInit("orangestaff", function(inst)
     if inst.components.blinkstaff then
-        old_onblinkfn = inst.components.blinkstaff.onblinkfn
+        local old_onblinkfn = inst.components.blinkstaff.onblinkfn
         inst.components.blinkstaff.onblinkfn = function(inst, pt, caster)
             if not caster.components.allachivevent.teleport then
                 caster.components.allachivevent.teleportamount = caster.components.allachivevent.teleportamount + 1
@@ -32,5 +32,18 @@ AddPrefabPostInit("orangestaff", function(inst)
                 old_onblinkfn(inst, pt, caster)
             end
         end
+    end
+end)
+
+AddComponentPostInit("leader", function(self)
+    local _AddFollower = self.AddFollower
+    self.AddFollower = function(self, follower, ...)
+        if self.followers[follower] == nil and follower.components.follower ~= nil then
+            self.inst:DoTaskInTime(.1, function()
+                self.inst:PushEvent("startgettingfollowed", follower)
+            end)
+        end
+        
+        _AddFollower(self, follower, ...)
     end
 end)

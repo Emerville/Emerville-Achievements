@@ -2176,80 +2176,77 @@ function allachivevent:burnorfreezeorsleep(inst)
 	end)
 end
 
---BeFriend
-function allachivevent:makefriend(inst)
-    function inst.components.leader:AddFollower(follower)
-        if self.followers[follower] == nil and follower.components.follower ~= nil then
-            local achiv = inst.components.allachivevent
-            --Pigman
-            if follower.prefab == "pigman" and achiv.goodman ~= true then
-                achiv.friendpig = achiv.friendpig + 1
-                if achiv.friendpig >= allachiv_eventdata["goodman"] then
-                    achiv.goodman = true
-                    achiv:seffc(inst, "goodman")
-                end
-            end
-            --Bunnyman
-            if follower.prefab == "bunnyman" and achiv.brother ~= true then
-                achiv.friendbunny = achiv.friendbunny + 1
-                if achiv.friendbunny >= allachiv_eventdata["brother"] then
-                    achiv.brother = true
-                    achiv:seffc(inst, "brother")
-                end
-            end
-            --Catcoon
-            if follower.prefab == "catcoon" and achiv.catperson ~= true then
-                achiv.friendcat = achiv.friendcat + 1
-                if achiv.friendcat >= allachiv_eventdata["catperson"] then
-                    achiv.catperson = true
-                    achiv:seffc(inst, "catperson")
-                end
-            end
-            --Spooders
-            if (follower.prefab == "spider" or 
-				follower.prefab == "spider_dropper" or 
-				follower.prefab == "spider_warrior" or 
-				follower.prefab == "spider_hider" or 
-				follower.prefab == "spider_spitter") and achiv.spooder ~= true then
-                achiv.friendspider = achiv.friendspider + 1
-                if achiv.friendspider >= allachiv_eventdata["spooder"] then
-                    achiv.spooder = true
-                    achiv:seffc(inst, "spooder")
-                end
-            end
-            --Mandrake
-            if follower.prefab == "mandrake_active" and achiv.evil ~= true and not TheWorld.components.worldstate.data.isday then
-                achiv.evilamount = achiv.evilamount + 1
-                if achiv.evilamount >= allachiv_eventdata["evil"] then
-                    achiv.evil = true
-                    achiv:seffc(inst, "evil")
-                end
-            end
-            --TallBird
-            if follower.prefab == "smallbird" and achiv.birdclop ~= true then
-                achiv.birdclop = true
-                achiv:seffc(inst, "birdclop")
-				local item1 = SpawnPrefab("goldcoin")
-				item1.components.stackable:SetStackSize(10)
-				inst.components.inventory:GiveItem(item1, nil, inst:GetPosition())
-            end
+-- Follower lookup table to avoid switch-case string comparison
+local followerEventTable = {}
 
-            self.followers[follower] = true
-            self.numfollowers = self.numfollowers + 1
-            follower.components.follower:SetLeader(self.inst)
-            follower:PushEvent("startfollowing", { leader = self.inst })
-
-            if not follower.components.follower.keepdeadleader then
-                self.inst:ListenForEvent("death", self._onfollowerdied, follower)
-            end
-
-            self.inst:ListenForEvent("onremove", self._onfollowerremoved, follower)
-
-            if self.inst:HasTag("player") and follower.prefab ~= nil then
-                ProfileStatsAdd("befriend_"..follower.prefab)
-            end
+local common_followerEvent = function(inst, name, counter)
+    local achiv = inst.components.allachivevent
+    if not achiv[name] then
+        achiv[counter] = achiv[counter] + 1
+        if achiv[counter] >= allachiv_eventdata[name] then
+            achiv[name] = true
+            achiv:seffc(inst, name)
         end
     end
+end
+
+-- Pigman
+followerEventTable.pigman = function(inst)
+    common_followerEvent(inst, "goodman", "friendpig")
+end
+
+-- Bunnyman
+followerEventTable.bunnyman = function(inst)
+    common_followerEvent(inst, "brother", "friendbunny")
+end
+
+-- Catcoon
+followerEventTable.catcoon = function(inst)
+    common_followerEvent(inst, "catperson", "friendcat")
+end
+
+-- Spooders
+followerEventTable.spider = function(inst)
+    common_followerEvent(inst, "spooder", "friendspider")
+end
+
+followerEventTable.spider_dropper = followerEventTable.spider
+followerEventTable.spider_warrior = followerEventTable.spider
+followerEventTable.spider_hider = followerEventTable.spider
+followerEventTable.spider_spitter = followerEventTable.spider
+
+-- Mandrake
+followerEventTable.mandrake_active = function(inst)
+    if not TheWorld.components.worldstate.data.isday then
+        common_followerEvent(inst, "evil", "evilamount")
+    end
+end
+
+-- Tallbirb
+followerEventTable.smallbird = function(inst)
+    local achiv = inst.components.allachivevent
+    if not achiv.birdclop then
+        achiv.birdclop = true
+        achiv:seffc(inst, "birdclop")
+        local item1 = SpawnPrefab("goldcoin")
+        item1.components.stackable:SetStackSize(10)
+        inst.components.inventory:GiveItem(item1, nil, inst:GetPosition())
+    end
+end
+
+--BeFriend
+function allachivevent:ongettingfollowed(inst)
+    inst:ListenForEvent("startgettingfollowed", function(inst, follower)
+        print("[Trace] We're getting followed....")
+        local eventfn = followerEventTable[follower.prefab]
+        if eventfn ~= nil then
+            eventfn(inst)
+        elseif follower:HasTag("critter") then
+            local achiv = inst.components.allachivevent
+            achiv.pet = true
+            achiv:seffc(self.inst, "pet")
+        end
+    end)
 end
 
 --Fish
@@ -2542,19 +2539,6 @@ function allachivevent:ontimepass(inst)
 				local item1 = SpawnPrefab("goldcoin")
 				item1.components.stackable:SetStackSize(20)
 				inst.components.inventory:GiveItem(item1, nil, inst:GetPosition())
-            end
-        end
-        --Critters
-        if self.pet ~= true then
-            if inst.components.leader:IsBeingFollowedBy("critter_lamb") or
-               inst.components.leader:IsBeingFollowedBy("critter_puppy") or
-               inst.components.leader:IsBeingFollowedBy("critter_kitten") or
-               inst.components.leader:IsBeingFollowedBy("critter_perdling") or
-               inst.components.leader:IsBeingFollowedBy("critter_dragonling") or
-               inst.components.leader:IsBeingFollowedBy("critter_glomling") or
-               inst.components.leader:IsBeingFollowedBy("critter_lunarmothling") then
-                self.pet = true
-                self:seffc(inst, "pet")
             end
         end
 		--Lavae
@@ -3143,7 +3127,7 @@ function allachivevent:Init(inst)
 			self:drownListener(inst)
 			self:lightningListener(inst)
 			self:burnorfreezeorsleep(inst)
-			self:makefriend(inst)
+			self:ongettingfollowed(inst)
 			self:onhook(inst)
 			self:onpick(inst)
 			self:chopper(inst)
