@@ -2205,16 +2205,6 @@ followerEventTable.catcoon = function(inst)
     common_followerEvent(inst, "catperson", "friendcat")
 end
 
--- Spooders
-followerEventTable.spider = function(inst)
-    common_followerEvent(inst, "spooder", "friendspider")
-end
-
-followerEventTable.spider_dropper = followerEventTable.spider
-followerEventTable.spider_warrior = followerEventTable.spider
-followerEventTable.spider_hider = followerEventTable.spider
-followerEventTable.spider_spitter = followerEventTable.spider
-
 -- Mandrake
 followerEventTable.mandrake_active = function(inst)
     if not TheWorld.components.worldstate.data.isday then
@@ -2241,6 +2231,8 @@ function allachivevent:ongettingfollowed(inst)
         local eventfn = followerEventTable[follower.prefab]
         if eventfn ~= nil then
             eventfn(inst)
+        elseif follower:HasTag("spider") then
+            common_followerEvent(inst, "spooder", "friendspider")
         elseif follower:HasTag("critter") then
             local achiv = inst.components.allachivevent
             achiv.pet = true
