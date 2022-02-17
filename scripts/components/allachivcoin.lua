@@ -210,7 +210,7 @@ function allachivcoin:critfn(inst)
         local chance = allachiv_coindata["crit"]*self.crit*100
         local damage = data.damage
         local target = data.target
-        if target and math.random(1,100) <= chance and not target:HasTag("wall") and self.crit > 0 and self.attackcheck ~= true and data.target.components.health and data.target.components.health.currenthealth > 0 then
+        if target and target.components.combat and math.random(1,100) <= chance and not target:HasTag("wall") and self.crit > 0 and self.attackcheck ~= true and data.target.components.health and data.target.components.health.currenthealth > 0 then
             self.attackcheck = true
 			target.components.combat:GetAttacked(inst, damage)
             local snap = SpawnPrefab("impact")
