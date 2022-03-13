@@ -2227,7 +2227,6 @@ end
 --BeFriend
 function allachivevent:ongettingfollowed(inst)
     inst:ListenForEvent("startgettingfollowed", function(inst, follower)
-        print("[Trace] We're getting followed....")
         local eventfn = followerEventTable[follower.prefab]
         if eventfn ~= nil then
             eventfn(inst)
