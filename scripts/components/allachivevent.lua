@@ -2232,9 +2232,9 @@ function allachivevent:ongettingfollowed(inst)
             eventfn(inst)
         elseif follower:HasTag("spider") then
             common_followerEvent(inst, "spooder", "friendspider")
-        elseif follower:HasTag("critter") and not inst.components.allachivevent.pet then
-            inst.components.allachivevent.pet = true
-            inst.components.allachivevent:seffc(self.inst, "pet")
+        elseif follower:HasTag("critter") and not self.pet then
+            self.pet = true
+            self:seffc(self.inst, "pet")
         end
     end)
 end
